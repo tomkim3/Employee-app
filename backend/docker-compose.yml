@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  api_employee:
+    container_name: employee_server
+    build: .
+    environment:
+      - TZ=Aisa/Tokyo
+    ports:
+      - 80:80
+    depends_on:
+      db_employee:
+        condition: service_healthy
+
+  db_employee:
+    container_name: employee_cassandra
+    image: cassandra:latest
+    volumes:
+      - ./out/cassandra_data:/var/lib/cassandra
+    environment:
+      - TZ=Aisa/Tokyo
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - 9042:9042

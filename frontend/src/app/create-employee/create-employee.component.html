@@ -1,0 +1,22 @@
+<nav>
+    <a routerLink="/employees">Employees list</a>
+</nav>
+
+<div>
+    <mat-card class="add-card">
+        <mat-card-content>
+            <mat-card-title>Create new employee</mat-card-title>
+            <mat-form-field class="input-full-width" appearance="fill">
+                <mat-label>Employee name</mat-label>
+                <input matInput placeholder="Ex. Tom" #employeeName>
+            </mat-form-field>
+            
+            <mat-form-field class="input-full-width" appearance="fill">
+                <mat-label>Attribute</mat-label>
+                <input matInput placeholder="Ex. sauna" #attribute>
+            </mat-form-field>
+            <button mat-raised-button class="add-button-row" color="primary" 
+            (click)="createEmployee(employeeName.value, attribute.value); employeeName.value=''; attribute.value=''">Create</button>
+        </mat-card-content>
+    </mat-card>
+</div>

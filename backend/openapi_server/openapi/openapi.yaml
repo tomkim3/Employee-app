@@ -1,0 +1,245 @@
+openapi: 3.0.0
+info:
+  license:
+    name: MIT
+  title: Employee management
+  version: 1.0.0
+servers:
+- url: /api
+paths:
+  /employees:
+    get:
+      operationId: list_employees
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employees'
+          description: A paged array of employees
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: List employees
+      tags:
+      - employees
+      x-openapi-router-controller: implemented.controllers.employees_controller
+    post:
+      operationId: create_employee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEmployee'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: A posted employee
+        "201":
+          description: Null response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a employee
+      tags:
+      - employees
+      x-openapi-router-controller: implemented.controllers.employees_controller
+  /employees/{employeeId}:
+    delete:
+      operationId: delete_employee
+      parameters:
+      - description: The id of the employee to retrieve
+        explode: false
+        in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Deletion successful
+        "201":
+          description: Null response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Delete a employee
+      tags:
+      - employees
+      x-openapi-router-controller: implemented.controllers.employees_controller
+    get:
+      operationId: get_employee_by_id
+      parameters:
+      - description: The id of the employee to get
+        explode: false
+        in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: An gotten employee
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Get employee by id
+      tags:
+      - employees
+      x-openapi-router-controller: implemented.controllers.employees_controller
+    put:
+      operationId: update_employee
+      parameters:
+      - description: The id of the employee to retrieve
+        explode: false
+        in: path
+        name: employeeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEmployee'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: An updated employee
+        "201":
+          description: Null response
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Update a employee
+      tags:
+      - employees
+      x-openapi-router-controller: implemented.controllers.employees_controller
+  /health:
+    get:
+      operationId: health_check
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_health_response'
+          description: Server is health
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Return server status
+      x-openapi-router-controller: implemented.controllers.health
+components:
+  schemas:
+    Employee:
+      example:
+        name: name
+        id: id
+        attr: attr
+      properties:
+        id:
+          title: id
+          type: string
+        name:
+          title: name
+          type: string
+        attr:
+          title: attr
+          type: string
+      required:
+      - id
+      - name
+      title: Employee
+      type: object
+    Employees:
+      items:
+        $ref: '#/components/schemas/Employee'
+      type: array
+    NewEmployee:
+      example:
+        name: name
+        attr: attr
+      properties:
+        name:
+          title: name
+          type: string
+        attr:
+          title: attr
+          type: string
+      required:
+      - name
+      title: NewEmployee
+      type: object
+    get_health_response:
+      example:
+        status: ok
+      properties:
+        status:
+          enum:
+          - ok
+          title: status
+          type: string
+      required:
+      - status
+      title: get_health_response
+      type: object
+    Error:
+      properties:
+        code:
+          format: int32
+          title: code
+          type: integer
+        message:
+          title: message
+          type: string
+      required:
+      - code
+      - message
+      title: Error
+      type: object

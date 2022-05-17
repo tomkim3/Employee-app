@@ -1,0 +1,24 @@
+<nav>
+    <a routerLink="/employees">Employees list</a>
+</nav>
+
+<div *ngIf="employee$ | async as employee">
+    <mat-card class="add-card">
+        <mat-card-content>
+            <mat-card-title>Employee</mat-card-title>
+            <mat-form-field class="input-full-width" appearance="fill">
+                <mat-label>Employee name</mat-label>
+                <input matInput [(ngModel)]="employee.name" #employeeName>
+            </mat-form-field>
+            
+            <mat-form-field class="input-full-width" appearance="fill">
+                <mat-label>Attribute</mat-label>
+                <input matInput [(ngModel)]="employee.attr" #attribute>
+            </mat-form-field>
+            <button mat-raised-button class="add-button-update" color="primary" 
+            (click)="updateEmployee(employee, employeeName.value, attribute.value);">Update</button>
+            <button mat-raised-button class="add-button-delete" color="primary" 
+            (click)="deleteEmployee(employee);">Delete</button>
+        </mat-card-content>
+    </mat-card>
+</div>
