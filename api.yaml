@@ -1,0 +1,214 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Employee management
+  license:
+    name: MIT
+servers:
+  - url: /api
+paths:
+  /health:
+    get:
+      summary: Return server status
+      x-openapi-router-controller: implemented.controllers.health
+      operationId: health_check
+      responses:
+        '200':
+          description: Server is health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_health_response'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /employees:
+    get:
+      summary: List employees
+      x-openapi-router-controller: implemented.controllers.employees_controller
+      operationId: list_employees
+      tags:
+        - employees
+      responses:
+        '200':
+          description: A paged array of employees
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Employees"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a employee
+      x-openapi-router-controller: implemented.controllers.employees_controller
+      operationId: create_employee
+      tags:
+        - employees
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewEmployee"
+      responses:
+        '200':
+          description: A posted employee
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Employee"
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /employees/{employeeId}:
+    get:
+      summary: Get employee by id
+      x-openapi-router-controller: implemented.controllers.employees_controller
+      operationId: get_employee_by_id
+      tags:
+        - employees
+      parameters:
+        - name: employeeId
+          in: path
+          required: true
+          description: The id of the employee to get
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An gotten employee
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Employee"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update a employee
+      x-openapi-router-controller: implemented.controllers.employees_controller
+      operationId: update_employee
+      tags:
+        - employees
+      parameters:
+        - name: employeeId
+          in: path
+          required: true
+          description: The id of the employee to retrieve
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewEmployee"
+      responses:
+        '200':
+          description: An updated employee
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Employee"
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a employee
+      x-openapi-router-controller: implemented.controllers.employees_controller
+      operationId: delete_employee
+      tags:
+        - employees
+      parameters:
+        - name: employeeId
+          in: path
+          required: true
+          description: The id of the employee to retrieve
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deletion successful
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Employee:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        attr:
+          type: string
+    Employees:
+      type: array
+      items:
+        $ref: "#/components/schemas/Employee"
+    NewEmployee:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        attr:
+          type: string
+    get_health_response:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

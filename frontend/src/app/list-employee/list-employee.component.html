@@ -1,0 +1,12 @@
+<nav>
+    <a routerLink="/create-employee">Create new employee</a>
+</nav>
+<h1>Employees list</h1>
+<ag-grid-angular
+    style="width: 630px; height: 500px;"
+    class="ag-theme-alpine"
+    [rowData]="employees$ | async"
+    [columnDefs]="columnDefs"
+    [frameworkComponents]="frameworkComponents"
+>
+</ag-grid-angular>

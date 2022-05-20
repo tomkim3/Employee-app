@@ -1,0 +1,46 @@
+nav a {
+    padding: 1rem;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+    background-color: #e8e8e8;
+    color: #3d3d3d;
+    border-radius: 4px;
+    margin: 10px 0px 25px 0px;
+  }
+  
+  nav a:hover {
+    color: white;
+    background-color: #42545C;
+  }
+  nav a.active {
+    background-color: black;
+  }
+
+  .add-card {
+    max-width: 400px;
+    /* border: solid; */
+    margin: 10px 0px 50px 0px;
+  }
+  
+  .input-full-width {
+    width: 100%;
+  }
+  
+  .add-button-update {
+    display: table-cell;
+    width: 40%;
+  }
+  
+  .add-button-update {
+    margin: 0px 70px 50px 0px;
+  }
+
+  .add-button-delete {
+    display: table-cell;
+    width: 40%;
+  }
+  
+  .add-button-delete {
+    margin: 0px 0px 50px 0px;
+  }
